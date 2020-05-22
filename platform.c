@@ -10,6 +10,7 @@
 
 void main(void)
 {
+	unsigned int scroll_y = 479;
 	ppu_off();
 	pal_col(0, 0x0f);
 	pal_col(1, 0x15);
@@ -19,5 +20,12 @@ void main(void)
 	ppu_on_all();
 
 	//main game loop
-	while(1);
+	while(1) {
+		scroll(0, scroll_y);
+		scroll_y--;
+		if (scroll_y == 0) {
+			scroll_y = 479;
+		}
+		ppu_wait_frame();
+	}
 }

@@ -7,3 +7,4 @@
 
 void __fastcall__ draw_bg(void);
 void __fastcall__ draw_platform(unsigned int, char);
+void __fastcall__ draw_row(char);
