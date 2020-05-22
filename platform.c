@@ -11,6 +11,7 @@
 void main(void)
 {
 	unsigned int scroll_y = 479;
+	unsigned char frame = 0;
 	ppu_off();
 	pal_col(0, 0x0f);
 	pal_col(1, 0x15);
@@ -22,7 +23,11 @@ void main(void)
 	//main game loop
 	while(1) {
 		scroll(0, scroll_y);
-		scroll_y--;
+		frame++;
+		if (frame == SCROLL_RATE) {
+			scroll_y--;
+			frame = 0;
+		}
 		if (scroll_y == 0) {
 			scroll_y = 479;
 		}
