@@ -1,19 +1,23 @@
 NAME = platform
-objs := $(NAME).o crt0.o 
+files := background
+cfiles := $(NAME).c src/background.c
+cobjs := $(NAME).s src/background.s
+objs := $(NAME).o crt0.o src/background.o
 out :=	$(NAME).nes
 
 all: $(out)
 clean:
 	rm -f $(objs)
+	rm -f $(cobjs)
 	rm -f $(NAME).s
 
 .PHONY: all clean
 
-$(NAME).s:
-	cc65 -Oi $(NAME).c -o $(NAME).s --add-source
+%.s: %.c
+	cc65	-Oi $< -o $@ --add-source
 
-%.o: %.s
+%.o: %.s 
 	ca65	-g $< -o $@
 
-$(NAME).nes: $(objs)
-	ld65 -C nrom_32k_vert.cfg -o rom/$(NAME).nes $(objs) nes.lib
+$(NAME).nes: $(cobjs) $(objs)
+	ld65 -C nrom_32k_horz.cfg -o rom/$(NAME).nes $(objs) nes.lib
