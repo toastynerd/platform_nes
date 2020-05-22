@@ -7,6 +7,7 @@
 
 #include "background.h"
 #include "../lib/neslib.h"
+#include "../lib/nesdoug.h"
 #include "../lib/defs.h"
 
 void __fastcall__ draw_bg(void)
@@ -15,7 +16,8 @@ void __fastcall__ draw_bg(void)
 	i = 0;
 	for (y = 0; y < 32; y ++) {
 		if (i == PLATFORM_DISTANCE || y == 0) {
-			draw_row(y);
+			draw_row(NAMETABLE_A, y);
+			draw_row(NAMETABLE_C, y);
 			i = 0;
 		}
 		i++;
@@ -33,14 +35,40 @@ void __fastcall__ draw_platform(unsigned int start_address, char length)
 	vram_put(PLATFORM_RIGHT_CAP);
 }
 
-void __fastcall__ draw_row(char row)
+void __fastcall__ buffer_platform(unsigned int start_address, char length)
+{
+	char i;
+	one_vram_buffer(PLATFORM_LEFT_CAP, start_address);
+	start_address++;
+	for (i = 1; i < length; i++) {
+		one_vram_buffer(PLATFORM_CENTER, start_address);
+		start_address++;
+	}
+	one_vram_buffer(PLATFORM_RIGHT_CAP, start_address);
+}
+
+void __fastcall__ draw_row(unsigned int nametable, char row)
 {
 	//left side of the screen
-	draw_platform(NTADR_A(rand16() & 0x0f, row), rand16() & 0x7);
-	draw_platform(NTADR_C(rand16() & 0x0f, row), rand16() & 0x7);
+	draw_platform(NTADR(nametable, rand16() & 0x0f, row), rand16() & 0x7);
 
 	//right side of screen
-	draw_platform(NTADR_A((rand16()|0x10) & 0x1f, row), rand16() & 0x7);
-	draw_platform(NTADR_C((rand16()|0x10) & 0x1f, row), rand16() & 0x7);
+	draw_platform(NTADR(nametable, (rand16()|0x10) & 0x1f, row), rand16() & 0x7);
 
+}
+
+
+void __fastcall__ buffer_row(unsigned int nametable, char row)
+{
+	//left side of the screen
+	buffer_platform(NTADR(nametable, rand16() & 0x0f, row), rand16() & 0x7);
+
+	//right side of screen
+	buffer_platform(NTADR(nametable, (rand16()|0x10) & 0x1f, row), rand16() & 0x7);
+
+}
+
+void __fastcall__ clear_row(unsigned int nametable, char row)
+{
+	multi_vram_buffer_horz(BLANK_TILE, 32, NTADR(nametable, 0, row));
 }

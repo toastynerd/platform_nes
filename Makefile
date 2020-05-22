@@ -1,5 +1,5 @@
 NAME = platform
-files := background
+files := background vrambuf
 cfiles := $(NAME).c src/background.c
 cobjs := $(NAME).s src/background.s
 objs := $(NAME).o crt0.o src/background.o

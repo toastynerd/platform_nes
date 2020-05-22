@@ -5,6 +5,7 @@
  * toasty <Tyler Morgan> May 2020
  */
 
+#define BLANK_TILE 0
 #define PLATFORM_LEFT_CAP 1
 #define PLATFORM_CENTER 2
 #define PLATFORM_RIGHT_CAP 3
