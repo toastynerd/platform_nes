@@ -33,20 +33,21 @@ void main(void)
 			frame = 0;
 		}
 		if (scroll_num == PLATFORM_DISTANCE<<3) {
-			if (scroll_y > 256) {
-				buffer_row(NAMETABLE_C, (char)((scroll_y- 0xff)>>3));
+			if (scroll_y > 240) {
+				buffer_row(NAMETABLE_C, (char)((scroll_y- 240)>>3));
 			} else {
 				buffer_row(NAMETABLE_A, (char)scroll_y>>3);
 			}
 			scroll_num = 0;
 		}
 		
-		ppu_wait_nmi();
 		if (scroll_y == 0) {
 			scroll_y = 479;
 			frame = 0;
 			scroll_num = 0;
 		}
+
+		ppu_wait_nmi();
 		clear_vram_buffer();
 	}
 }
