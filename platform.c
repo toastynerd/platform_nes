@@ -14,7 +14,6 @@ void main(void)
 	unsigned int scroll_y = 479;
 	unsigned char frame = 0;
 	unsigned char scroll_num = 0;
-	unsigned char clear_scroll_num = 0;
 	ppu_off();
 	pal_col(0, 0x0f);
 	pal_col(1, 0x15);
@@ -30,18 +29,8 @@ void main(void)
 		frame++;
 		if (frame == SCROLL_RATE) {
 			scroll_num++;
-			clear_scroll_num++;
 			scroll_y--;
 			frame = 0;
-		}
-		if (clear_scroll_num == 8) {
-			if (scroll_y > 256) {
-				clear_row(NAMETABLE_C, (char)((scroll_y- 0xff)>>3));
-			} else {
-				clear_row(NAMETABLE_A, (char)scroll_y>>3);
-			}
-			clear_scroll_num = 0;
-
 		}
 		if (scroll_num == PLATFORM_DISTANCE<<3) {
 			if (scroll_y > 256) {
@@ -53,6 +42,9 @@ void main(void)
 		}
 		if (scroll_y == 0) {
 			scroll_y = 479;
+			frame = 0;
+			scroll_num = 0;
+			
 		}
 		ppu_wait_nmi();
 		clear_vram_buffer();

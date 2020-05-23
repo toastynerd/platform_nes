@@ -14,10 +14,17 @@ void __fastcall__ draw_bg(void)
 {
 	char y, i;
 	i = 0;
-	for (y = 0; y < 32; y ++) {
+	for (y = 28; y > 0; y--) {
+		if (i == PLATFORM_DISTANCE || y == 0) {
+			draw_row(NAMETABLE_C, y);
+			i = 0;
+		}
+		i++;
+	}
+	i = 0;
+	for (y = 32; y > 0; y--) {
 		if (i == PLATFORM_DISTANCE || y == 0) {
 			draw_row(NAMETABLE_A, y);
-			draw_row(NAMETABLE_C, y);
 			i = 0;
 		}
 		i++;
@@ -50,21 +57,22 @@ void __fastcall__ buffer_platform(unsigned int start_address, char length)
 void __fastcall__ draw_row(unsigned int nametable, char row)
 {
 	//left side of the screen
-	draw_platform(NTADR(nametable, rand16() & 0x0f, row), rand16() & 0x7);
+	draw_platform(NTADR(nametable, rand16() & 0x07, row), (rand16() | 0x4) & 0x7);
 
 	//right side of screen
-	draw_platform(NTADR(nametable, (rand16()|0x10) & 0x1f, row), rand16() & 0x7);
+	draw_platform(NTADR(nametable, (rand16()|0x10) & 0x17, row), (rand16() | 0x4) & 0x7);
 
 }
 
 
 void __fastcall__ buffer_row(unsigned int nametable, char row)
 {
+	clear_row(nametable, row);
 	//left side of the screen
-	buffer_platform(NTADR(nametable, rand16() & 0x0f, row), rand16() & 0x7);
+	buffer_platform(NTADR(nametable, rand16() & 0x07, row), (rand16() | 0x4) & 0x7);
 
 	//right side of screen
-	buffer_platform(NTADR(nametable, (rand16()|0x10) & 0x1f, row), rand16() & 0x7);
+	buffer_platform(NTADR(nametable, (rand16()|0x10) & 0x17, row), (rand16() | 0x4) & 0x7);
 
 }
 
