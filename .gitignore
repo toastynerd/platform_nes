@@ -1,3 +1,4 @@
 **/*.o
 platform.s
 src/*.s
+demos

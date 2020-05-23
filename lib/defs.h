@@ -10,4 +10,4 @@
 #define PLATFORM_CENTER 2
 #define PLATFORM_RIGHT_CAP 3
 #define PLATFORM_DISTANCE 3
-#define SCROLL_RATE 1 //lower the number the faster
+#define SCROLL_RATE 4 //lower the number the faster
