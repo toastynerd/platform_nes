@@ -40,13 +40,13 @@ void main(void)
 			}
 			scroll_num = 0;
 		}
+		
+		ppu_wait_nmi();
 		if (scroll_y == 0) {
 			scroll_y = 479;
 			frame = 0;
 			scroll_num = 0;
-			
 		}
-		ppu_wait_nmi();
 		clear_vram_buffer();
 	}
 }

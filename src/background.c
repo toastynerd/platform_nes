@@ -10,6 +10,41 @@
 #include "../lib/nesdoug.h"
 #include "../lib/defs.h"
 
+const unsigned char blank_row[] = {
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE,
+BLANK_TILE
+};
+
 void __fastcall__ draw_bg(void)
 {
 	char y, i;
@@ -46,12 +81,10 @@ void __fastcall__ buffer_platform(unsigned int start_address, char length)
 {
 	char i;
 	one_vram_buffer(PLATFORM_LEFT_CAP, start_address);
-	start_address++;
 	for (i = 1; i < length; i++) {
-		one_vram_buffer(PLATFORM_CENTER, start_address);
-		start_address++;
+		one_vram_buffer(PLATFORM_CENTER, start_address + i);
 	}
-	one_vram_buffer(PLATFORM_RIGHT_CAP, start_address);
+	one_vram_buffer(PLATFORM_RIGHT_CAP, start_address + i);
 }
 
 void __fastcall__ draw_row(unsigned int nametable, char row)
@@ -69,7 +102,7 @@ void __fastcall__ buffer_row(unsigned int nametable, char row)
 {
 	clear_row(nametable, row);
 	//left side of the screen
-	buffer_platform(NTADR(nametable, rand16() & 0x07, row), (rand16() | 0x4) & 0x7);
+	buffer_platform(NTADR(nametable, (rand16() | 0x1) & 0x07, row), (rand16() | 0x4) & 0x7);
 
 	//right side of screen
 	buffer_platform(NTADR(nametable, (rand16()|0x10) & 0x17, row), (rand16() | 0x4) & 0x7);
@@ -78,5 +111,5 @@ void __fastcall__ buffer_row(unsigned int nametable, char row)
 
 void __fastcall__ clear_row(unsigned int nametable, char row)
 {
-	multi_vram_buffer_horz(BLANK_TILE, 32, NTADR(nametable, 0, row));
+	multi_vram_buffer_horz(blank_row, 32, NTADR(nametable, 0, row));
 }
